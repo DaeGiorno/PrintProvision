@@ -35,22 +35,6 @@ function Add-PrinterOption {
 
         Write-Host "Shared printer $selectedPrinter added for department $department and set as the default printer successfully!" 
         
-        # Remove printers connected to 'W2K8' print servers
-        $w2k8Printers = Get-WmiObject -Class Win32_Printer | Where-Object { $_.PortName -match "W2K8" }
-
-        if ($w2k8Printers.Count -gt 0) {
-            Write-Host "The following printers connected to 'W2K8' print servers will be removed:"
-            $w2k8Printers | ForEach-Object {
-                Write-Host $_.Name
-            }
-            
-            $w2k8Printers | ForEach-Object {
-                Write-Host "Removing printer: $($_.Name)"
-                $_.Delete()
-            }
-        } else {
-            Write-Host "No printers connected to 'W2K8' print servers found."
-        }
     }
     catch { 
         Write-Host "Failed to add the printer $selectedPrinter for department $department." 
@@ -60,7 +44,7 @@ function Add-PrinterOption {
 
 # Read the departments from the CSV file and create a hashtable
 $departments = @{}
-Import-Csv -Path "E:\Printer Project\departments.csv" | ForEach-Object {
+Import-Csv -Path "C:\departments.csv" | ForEach-Object {
     $department = $_.Department
     $printServer = $_.PrintServer
 
